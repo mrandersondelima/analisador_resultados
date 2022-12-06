@@ -30,12 +30,10 @@ while True:
 
                 if primeira_execucao:
                     primeira_execucao = False
-                    print('primeira execução')
                     for placar in resultados:
                         gols_casa = placar.split('x')[0]
                         gols_fora = placar.split('x')[1]
                         if int(gols_casa) + int(gols_fora) < 3:
-                            print('jogo com menos de 2,5')
                             numero_jogos_amarelos_atual += 1
                         else:
                             break
@@ -43,17 +41,15 @@ while True:
                     gols_casa = int(resultados[0].split('x')[0])
                     gols_fora = int(resultados[0].split('x')[1])
                     if int(gols_casa) + int(gols_fora) < 3:
-                        print('jogo com menos de 2,5')
                         numero_jogos_amarelos_atual += 1
                     else:
                         numero_jogos_amarelos_atual = 0
-                        atingiu_jogos_amarelos = False
+                        telegram_bot.envia_mensagem(f'JANELA DE APOSTA FECHADA.')
 
                 print(numero_jogos_amarelos_atual)
 
-                if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS and not atingiu_jogos_amarelos:
-                    TelegramBot().envia_mensagem('HORA DE APOSTAR!!!')
-                    atingiu_jogos_amarelos = True
+                if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS:
+                    telegram_bot.envia_mensagem(f'HORA DE APOSTAR!!! {numero_jogos_amarelos_atual} JOGOS.')
 
                 if len(ultimo_jogo) == 2:
                     del ultimo_jogo[ultima_lista]
