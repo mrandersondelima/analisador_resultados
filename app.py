@@ -13,7 +13,7 @@ ultima_lista = ''
 
 while True:
     saida = os.popen('../monkeybet/results.sh').read()
-    if saida.split('\n')[0] == '':
+    if saida.split('\n')[0] == '' or 'PLAYNOW!' not in saida:
         print('JOGO EM ANDAMENTO...')
     else:
         lista_resultados = saida.split('\n')[2]
@@ -28,32 +28,32 @@ while True:
 
                 resultados = lista_resultados.split(' ')
 
-                numero_jogos_amarelos_atual = 0
-
                 if primeira_execucao:
-                    for placar in resultados.reverse():
+                    primeira_execucao = False
+                    print('primeira execução')
+                    for placar in resultados:
                         gols_casa = placar.split('x')[0]
                         gols_fora = placar.split('x')[1]
                         if int(gols_casa) + int(gols_fora) < 3:
+                            print('jogo com menos de 2,5')
                             numero_jogos_amarelos_atual += 1
                         else:
-                            numero_jogos_amarelos_atual = 0
-                            atingiu_jogos_amarelos = False
-                        if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS and not atingiu_jogos_amarelos:
-                            TelegramBot().envia_mensagem('HORA DE APOSTAR!!!')
-                            atingiu_jogos_amarelos = True
                             break
                 else:
                     gols_casa = int(resultados[0].split('x')[0])
                     gols_fora = int(resultados[0].split('x')[1])
                     if int(gols_casa) + int(gols_fora) < 3:
+                        print('jogo com menos de 2,5')
                         numero_jogos_amarelos_atual += 1
                     else:
                         numero_jogos_amarelos_atual = 0
                         atingiu_jogos_amarelos = False
-                    if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS and not atingiu_jogos_amarelos:
-                        TelegramBot().envia_mensagem('HORA DE APOSTAR!!!')
-                        atingiu_jogos_amarelos = True
+
+                print(numero_jogos_amarelos_atual)
+
+                if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS and not atingiu_jogos_amarelos:
+                    TelegramBot().envia_mensagem('HORA DE APOSTAR!!!')
+                    atingiu_jogos_amarelos = True
 
                 if len(ultimo_jogo) == 2:
                     del ultimo_jogo[ultima_lista]
