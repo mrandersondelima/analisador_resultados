@@ -6,6 +6,8 @@ NUMERO_JOGOS_AMARELOS = 3
 numero_jogos_amarelos_atual = 0
 ultimo_jogo = dict()
 telegram_bot = TelegramBot()
+atingiu_jogos_amarelos = False
+primeira_execucao = True
 
 ultima_lista = ''
 
@@ -28,16 +30,30 @@ while True:
 
                 numero_jogos_amarelos_atual = 0
 
-                for placar in resultados:
-                    gols_casa = placar.split('x')[0]
-                    gols_fora = placar.split('x')[1]
+                if primeira_execucao:
+                    for placar in resultados.reverse():
+                        gols_casa = placar.split('x')[0]
+                        gols_fora = placar.split('x')[1]
+                        if int(gols_casa) + int(gols_fora) < 3:
+                            numero_jogos_amarelos_atual += 1
+                        else:
+                            numero_jogos_amarelos_atual = 0
+                            atingiu_jogos_amarelos = False
+                        if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS and not atingiu_jogos_amarelos:
+                            TelegramBot().envia_mensagem('HORA DE APOSTAR!!!')
+                            atingiu_jogos_amarelos = True
+                            break
+                else:
+                    gols_casa = int(resultados[0].split('x')[0])
+                    gols_fora = int(resultados[0].split('x')[1])
                     if int(gols_casa) + int(gols_fora) < 3:
                         numero_jogos_amarelos_atual += 1
                     else:
-                        numero_jogos_amarelos_atual = -10
-                    if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS:
+                        numero_jogos_amarelos_atual = 0
+                        atingiu_jogos_amarelos = False
+                    if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS and not atingiu_jogos_amarelos:
                         TelegramBot().envia_mensagem('HORA DE APOSTAR!!!')
-                        break
+                        atingiu_jogos_amarelos = True
 
                 if len(ultimo_jogo) == 2:
                     del ultimo_jogo[ultima_lista]
