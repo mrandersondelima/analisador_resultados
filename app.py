@@ -42,14 +42,16 @@ while True:
                     gols_fora = int(resultados[0].split('x')[1])
                     if int(gols_casa) + int(gols_fora) < 3:
                         numero_jogos_amarelos_atual += 1
-                    else:
+                    elif int(gols_casa) + int(gols_fora) >= 3 and atingiu_jogos_amarelos:
                         numero_jogos_amarelos_atual = 0
                         telegram_bot.envia_mensagem(f'JANELA DE APOSTA FECHADA.')
+                        atingiu_jogos_amarelos = False
 
                 print(numero_jogos_amarelos_atual)
 
                 if numero_jogos_amarelos_atual >= NUMERO_JOGOS_AMARELOS:
                     telegram_bot.envia_mensagem(f'HORA DE APOSTAR!!! {numero_jogos_amarelos_atual} JOGOS.')
+                    atingiu_jogos_amarelos = True
 
                 if len(ultimo_jogo) == 2:
                     del ultimo_jogo[ultima_lista]
