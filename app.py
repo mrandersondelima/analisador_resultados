@@ -2,7 +2,7 @@ import os
 from time import sleep
 from telegram_bot import TelegramBot
 
-NUMERO_JOGOS_AMARELOS = 3
+NUMERO_JOGOS_AMARELOS = 7
 numero_jogos_amarelos_atual = 0
 ultimo_jogo = dict()
 telegram_bot = TelegramBot()
