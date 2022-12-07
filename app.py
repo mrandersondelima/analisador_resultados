@@ -14,14 +14,13 @@ ultima_lista = ''
 while True:
     saida = os.popen('../monkeybet/results.sh').read()
     if saida.split('\n')[0] == '' or 'PLAYNOW!' not in saida:
-        print('JOGO EM ANDAMENTO...')
+        pass
     else:
         lista_resultados = saida.split('\n')[2]
 
         if '_' not in lista_resultados:
             # essa lista já foi capturado
             if ultimo_jogo.get(lista_resultados) == True:
-                print('Lista já capturada...')
                 pass
             else:
                 print('Nova lista: ', lista_resultados)
